@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from . import forms
 from .forms import RegistrationForm, EditProfileForm
-from django.contrib.auth import authenticate, login, update_session_auth_hash
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from posts.models import Post
 
 def register(request):
     if request.method == 'POST':
@@ -39,6 +40,10 @@ def user_login(request):
         form = AuthenticationForm()
     return render(request, 'authors/registration.html', {'form': form, 'title': 'Login'})
 
+@login_required
+def profile(request):
+    data  = Post.objects.filter(author = request.user)
+    return render(request, 'authors/profile.html', {'data': data})
 
 @login_required
 def profile_update(request):
@@ -60,7 +65,14 @@ def password_change(request):
             form.save()
             update_session_auth_hash(request, form.user)
             messages.success(request, 'Password updated successfully!')
-            return redirect('profile_update')
+            return redirect('update_profile')
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'authors/password_change.html', {'form': form})
+
+
+
+def user_logout(request):
+    logout(request)
+    messages.success(request, 'Logout successful!')
+    return redirect('homepage')

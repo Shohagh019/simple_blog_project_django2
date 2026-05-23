@@ -1,46 +1,280 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="container py-5">
-  <!-- Header -->
-  <div class="text-center mb-5">
-    <h2 class="fw-semibold">Latest Stories</h2>
-    <p class="text-muted">Insights, updates, and articles from authors</p>
-  </div>
-
-  <!-- Feed -->
-  <div class="d-flex flex-column align-items-center gap-4">
-    {% for post in data %}
-
-    <div class="card border-0 shadow-sm w-100" style="max-width: 720px">
-      <div class="card-body p-4">
-        <!-- Author -->
-        <small class="text-muted d-block mb-2"> {{ post.author.name }} </small>
-
-        <!-- Title -->
-        <h5 class="fw-semibold mb-2">{{ post.title }}</h5>
-
-        <!-- Content -->
-        <p class="text-muted mb-3">{{ post.content }}</p>
-
-        <!-- Categories -->
-        <div class="mb-3">
-          {% for cat in post.category.all %}
-          <span class="badge bg-light text-dark border me-1">
-            {{ cat.name }}
-          </span>
-          {% endfor %}
+<div class="container-fluid p-0">
+  <!-- HERO SECTION -->
+  <section class="bg-dark text-white position-relative overflow-hidden">
+    <div class="container py-5">
+      <!-- Top Navbar -->
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <!-- Brand -->
+        <div>
+          <h3 class="fw-bold mb-0">MyBlog</h3>
         </div>
 
-        <!-- Action -->
-        <div>
-          <a href="{% url 'edit_post' id=post.id %}" class="btn btn-sm btn-outline-dark"> Edit Post </a>
-          <a href="{% url 'delete_post' id=post.id %}" class="btn btn-sm btn-outline-dark"> Delete Post</a>
+        <!-- Toggle Button -->
+        <button
+          class="btn btn-outline-light rounded-circle d-lg-none"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#sidebarMenu"
+        >
+          ☰
+        </button>
+      </div>
+
+      <!-- Hero Content -->
+      <div class="row align-items-center gy-5">
+        <!-- Left Content -->
+        <div class="col-lg-7">
+          <span class="badge bg-light text-dark px-3 py-2 rounded-pill mb-3">
+            Modern Blogging Platform
+          </span>
+
+          <h1 class="display-4 fw-bold lh-sm mb-4">
+            Read Professional <br />
+            Stories & Insights
+          </h1>
+
+          <p class="text-light-emphasis fs-5 mb-4" style="max-width: 650px">
+            Explore curated articles, industry insights, and creative stories
+            written by authors from different categories.
+          </p>
+
+          <div class="d-flex flex-wrap gap-3">
+            <a href="#posts" class="btn btn-light px-4 py-2 rounded-pill">
+              Explore Posts
+            </a>
+
+            <button
+              class="btn btn-outline-light px-4 py-2 rounded-pill d-none d-lg-block"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#sidebarMenu"
+            >
+              Browse Categories
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Stats -->
+        <div class="col-lg-5">
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="glass-card p-4 rounded-4">
+                <h2 class="fw-bold mb-1">{{ data|length }}</h2>
+                <p class="mb-0 text-light-emphasis">Total Posts</p>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="glass-card p-4 rounded-4">
+                <h2 class="fw-bold mb-1">{{ categories|length }}</h2>
+                <p class="mb-0 text-light-emphasis">Categories</p>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="glass-card p-4 rounded-4">
+                <h5 class="fw-semibold mb-2">Trending Topics</h5>
+
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                  {% for cat in categories|slice:":5" %}
+                  <a
+                    href="{% url 'category_posts' cat.slug %}"
+                    class="sidebar-link d-flex justify-content-between align-items-center text-decoration-none"
+                  >
+                    <span>{{ cat.name }}</span>
+                  </a>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+  </section>
 
-    {% endfor %}
+  <!-- SIDEBAR -->
+  <div
+    class="offcanvas offcanvas-start border-0"
+    tabindex="-1"
+    id="sidebarMenu"
+  >
+    <div class="offcanvas-header border-bottom p-4">
+      <div>
+        <h4 class="fw-bold mb-0">Categories</h4>
+        <small class="text-muted"> Filter blog posts </small>
+      </div>
+
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="offcanvas"
+      ></button>
+    </div>
+
+    <div class="offcanvas-body p-4">
+      <!-- Category Select -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold"> Select Category </label>
+
+        <select
+          class="form-select form-select-lg"
+          onchange="if (this.value) window.location.href = this.value;"
+        >
+          <option selected disabled>Choose Category</option>
+
+          {% for cat in categories %}
+          <option value="{% url 'category_posts' cat.slug %}">
+            {{ cat.name }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Category List -->
+      <div class="d-flex flex-column gap-3">
+        {% for cat in categories %}
+
+        <a
+          href="{% url 'category_posts' cat.slug %}"
+          class="sidebar-link d-flex justify-content-between align-items-center text-decoration-none"
+        >
+          <span>{{ cat.name }}</span>
+
+          <span class="badge bg-dark rounded-pill"> → </span>
+        </a>
+
+        {% endfor %}
+      </div>
+    </div>
   </div>
+
+  <!-- POSTS SECTION -->
+  <section id="posts" class="py-5 bg-light">
+    <div class="container">
+      <!-- Heading -->
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+          <h2 class="fw-bold mb-1">Latest Articles</h2>
+
+          <p class="text-muted mb-0">{{ data|length }} posts available</p>
+        </div>
+      </div>
+
+      <!-- POSTS GRID -->
+      <div class="row g-4">
+        {% for post in data %}
+
+        <div class="col-12 col-md-6 col-xl-4">
+          <div class="card border-0 shadow-sm rounded-4 h-100 post-card">
+            <div class="card-body p-4 d-flex flex-column">
+              <!-- Author -->
+              <div
+                class="d-flex align-items-center justify-content-between mb-3"
+              >
+                <div>
+                  <small class="text-muted d-block"> Author </small>
+
+                  <h6 class="fw-semibold mb-0">{{ post.author.name }}</h6>
+                </div>
+
+                <span class="badge bg-light text-dark border"> Article </span>
+              </div>
+
+              <!-- Title -->
+              <h4 class="fw-bold mb-3">{{ post.title }}</h4>
+
+              <!-- Content -->
+              <p class="text-muted flex-grow-1">
+                {{ post.content|truncatewords:25 }}
+              </p>
+
+              <!-- Categories -->
+              <div class="d-flex flex-wrap gap-2 mb-4">
+                {% for cat in post.category.all %}
+
+                <span class="badge text-bg-light border rounded-pill px-3 py-2">
+                  {{ cat.name }}
+                </span>
+
+                {% endfor %}
+              </div>
+
+              <!-- Buttons -->
+              <div class="d-flex gap-2 mt-auto">
+                <a
+                  href="{% url 'edit_post' id=post.id %}"
+                  class="btn btn-dark btn-sm rounded-pill px-4"
+                >
+                  Edit
+                </a>
+
+                <a
+                  href="{% url 'delete_post' id=post.id %}"
+                  class="btn btn-outline-danger btn-sm rounded-pill px-4"
+                >
+                  Delete
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% endfor %}
+      </div>
+    </div>
+  </section>
 </div>
+
+<!-- CUSTOM STYLE -->
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+  }
+
+  .post-card {
+    transition: 0.3s ease;
+  }
+
+  .post-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.08) !important;
+  }
+
+  .sidebar-link {
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: #f8f9fa;
+    color: #212529;
+    transition: 0.3s ease;
+    font-weight: 500;
+  }
+
+  .sidebar-link:hover {
+    background: #212529;
+    color: white;
+    transform: translateX(4px);
+  }
+
+  .form-select:focus {
+    box-shadow: none;
+    border-color: #212529;
+  }
+
+  .btn {
+    transition: 0.2s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+</style>
 
 {% endblock %}
