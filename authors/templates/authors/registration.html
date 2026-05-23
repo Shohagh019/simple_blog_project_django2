@@ -1,0 +1,26 @@
+{% extends 'base.html' %} {% block content %} {% load crispy_forms_tags %}
+<div
+  class="container d-flex justify-content-center align-items-center min-vh-100"
+>
+  <div class="card shadow-sm border-0" style="max-width: 500px; width: 100%">
+    <!-- Header -->
+    <div class="card-header bg-white border-0 text-center py-4">
+      <h3 class="mb-0 fw-semibold">Registration Form</h3>
+      <p class="text-muted small mb-0">Register for a new profile!</p>
+    </div>
+
+    <!-- Body -->
+    <div class="card-body px-4 py-3">
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="mb-3">{{ form|crispy }}</div>
+
+        <button type="submit" class="btn btn-dark w-100 py-2">
+          Register
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

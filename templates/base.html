@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Bootstrap demo</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      body {
+        background-color: #f8f9fa;
+        color: #212529;
+      }
+
+      .navbar {
+        background-color: #ffffff;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .navbar-brand {
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+
+      .nav-link {
+        position: relative;
+        color: #495057 !important;
+        font-weight: 500;
+        margin: 0 6px;
+        transition: all 0.25s ease;
+      }
+
+      .nav-link:hover {
+        color: #000 !important;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 0%;
+        height: 2px;
+        background-color: #212529;
+        transition: width 0.3s ease;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .main-content {
+        min-height: 90vh;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg shadow-sm sticky-top">
+      <div class="container">
+
+        <a class="navbar-brand" href="#">
+          BlogSite
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div
+          class="collapse navbar-collapse"
+          id="navbarSupportedContent"
+        >
+
+          <!-- Left Nav -->
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                aria-current="page"
+                href="{% url 'homepage' %}"
+              >
+                Home
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{% url 'add_category' %}"
+              >
+                Add Category
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{% url 'add_posts' %}"
+              >
+                Add Post
+              </a>
+            </li>
+
+          </ul>
+
+          <!-- Right Nav -->
+          <ul class="navbar-nav">
+
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{% url 'register' %}"
+              >
+                Register
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="#"
+              >
+                Login
+              </a>
+            </li>
+
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content container py-4">
+
+      {% block content %}
+      {% endblock %}
+
+    </main>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+
+  </body>
+</html>
