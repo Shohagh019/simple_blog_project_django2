@@ -1,167 +1,151 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Bootstrap demo</title>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-      crossorigin="anonymous"
-    />
+  <title>Bootstrap demo</title>
 
-    <style>
-      body {
-        background-color: #f8f9fa;
-        color: #212529;
-      }
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
 
-      .navbar {
-        background-color: #ffffff;
-        border-bottom: 1px solid #e9ecef;
-      }
+  <style>
+    body {
+      background-color: #f8f9fa;
+      color: #212529;
+    }
 
-      .navbar-brand {
-        font-weight: 700;
-        letter-spacing: 0.5px;
-      }
+    .navbar {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e9ecef;
+    }
 
-      .nav-link {
-        position: relative;
-        color: #495057 !important;
-        font-weight: 500;
-        margin: 0 6px;
-        transition: all 0.25s ease;
-      }
+    .navbar-brand {
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
 
-      .nav-link:hover {
-        color: #000 !important;
-      }
+    .nav-link {
+      position: relative;
+      color: #495057 !important;
+      font-weight: 500;
+      margin: 0 6px;
+      transition: all 0.25s ease;
+    }
 
-      .nav-link::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: -2px;
-        width: 0%;
-        height: 2px;
-        background-color: #212529;
-        transition: width 0.3s ease;
-      }
+    .nav-link:hover {
+      color: #000 !important;
+    }
 
-      .nav-link:hover::after {
-        width: 100%;
-      }
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0%;
+      height: 2px;
+      background-color: #212529;
+      transition: width 0.3s ease;
+    }
 
-      .main-content {
-        min-height: 90vh;
-      }
-    </style>
-  </head>
+    .nav-link:hover::after {
+      width: 100%;
+    }
 
-  <body>
+    .main-content {
+      min-height: 90vh;
+    }
+  </style>
+</head>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg shadow-sm sticky-top">
-      <div class="container">
+<body>
 
-        <a class="navbar-brand" href="#">
-          BlogSite
-        </a>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg shadow-sm sticky-top">
+    <div class="container">
 
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+      <a class="navbar-brand" href="#">
+        BlogSite
+      </a>
 
-        <div
-          class="collapse navbar-collapse"
-          id="navbarSupportedContent"
-        >
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-          <!-- Left Nav -->
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-            <li class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                href="{% url 'homepage' %}"
-              >
-                Home
-              </a>
-            </li>
+        <!-- Left Nav -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="{% url 'add_category' %}"
-              >
-                Add Category
-              </a>
-            </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'homepage' %}">
+              Home
+            </a>
+          </li>
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'add_posts' %}">
+              Add Post
+            </a>
+          </li>
+          {% endif %}
 
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="{% url 'add_posts' %}"
-              >
-                Add Post
-              </a>
-            </li>
+        </ul>
 
-          </ul>
+        <!-- Right Nav -->
+        <ul class="navbar-nav">
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'update_profile' %}">
+              Profile
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              Logout
+            </a>
+          </li>
 
-          <!-- Right Nav -->
-          <ul class="navbar-nav">
+          {% else %}
 
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="{% url 'register' %}"
-              >
-                Register
-              </a>
-            </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'register' %}">
+              Register
+            </a>
+          </li>
 
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="#"
-              >
-                Login
-              </a>
-            </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">
+              Login
+            </a>
+          </li>
+          {% endif %}
 
-          </ul>
 
-        </div>
+        </ul>
+
       </div>
-    </nav>
+    </div>
+  </nav>
 
-    <!-- Main Content -->
-    <main class="main-content container py-4">
+  {% for i in messages %}
+  <h4 class="text-{{i.tags}}">{{ i }}</h4>
+  {% endfor %}
 
-      {% block content %}
-      {% endblock %}
+  <!-- Main Content -->
+  <main class="main-content container py-4">
 
-    </main>
+    {% block content %}
+    {% endblock %}
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-      crossorigin="anonymous"
-    ></script>
+  </main>
 
-  </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+
+</body>
+
 </html>
